@@ -1,11 +1,13 @@
 const { validateCredentials } = require('./auth');
+const { create } = require('./mysql');
 
-function getToken(request, response) {
+async function getToken(request, response) {
   const { username, password } = request.query;
-  if (!validateCredentials(username, password)) {
-    return response.sendStatus(401);
-  }
-  return response.send('token');
+  const userID = await validateCredentials(username, password);
+  if (!userID) return response.sendStatus(401);
+  const token = Date.now();
+  await create('tokens', { token, userID });
+  return response.send({ token });
 }
 
 exports.tokens = (request, response) => {
