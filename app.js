@@ -1,6 +1,8 @@
 const express = require('express');
 const { validateToken } = require('./auth');
+
 const { users } = require('./users');
+const { tokens } = require('./tokens');
 
 const app = express();
 
@@ -15,6 +17,7 @@ app.use((request, response, next) => {
 app.get('/:resource/:id?', (request, response) => {
   const { resource } = request.params;
   switch (resource) {
+    case 'tokens': return tokens(request, response);
     case 'users': return users(request, response);
     default: return response.sendStatus(404);
   }
