@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8000;
 
 app.use(async (request, response, next) => {
   const token = request.headers.authorization;
-  const tokenValid = await validateToken(token);
+  const tokenValid = await validateToken(token, request);
   if (!tokenValid) return response.sendStatus(401);
 
   return next();

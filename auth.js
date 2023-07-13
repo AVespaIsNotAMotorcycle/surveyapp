@@ -10,11 +10,12 @@ exports.validateCredentials = async (username, password) => {
       params: `WHERE username="${username}"`,
     },
   );
-  console.log(`validateToken(${username}) => ${id}`);
   return id;
 };
 
-exports.validateToken = async (token) => {
+exports.validateToken = async (token, request) => {
+  const { path } = request;
+  if (path === '/tokens') return true;
   try {
     await read(
       'tokens',
