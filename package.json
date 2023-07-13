@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint ./*.js",
+    "dev": "nodemon --exec 'npm run lint && node app'",
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
