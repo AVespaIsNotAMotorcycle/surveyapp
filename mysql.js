@@ -29,7 +29,9 @@ exports.read = (
   connection.query(query, (error, results) => {
     if (error) return reject(error);
     if (options.exactlyOne) {
-      if (results.length !== 1) throw Error('More than 1 result');
+      if (results.length !== 1) {
+        reject(Error(`More than 1 result in ${table} ${params}`));
+      }
       return resolve(results[0]);
     }
     return resolve(results);
