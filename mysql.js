@@ -27,8 +27,12 @@ exports.read = (
   const params = options.params || '';
   const query = `SELECT * FROM ${table} ${params}`;
   connection.query(query, (error, results) => {
-    if (error) reject(error);
-    else resolve(results);
+    if (error) return reject(error);
+    if (options.exactlyOne) {
+      if (results.length !== 1) throw Error('More than 1 result');
+      return resolve(results[0]);
+    }
+    return resolve(results);
   });
 });
 exports.update = () => {};
