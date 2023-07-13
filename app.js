@@ -8,8 +8,10 @@ const app = express();
 
 const PORT = process.env.PORT || 8000;
 
-app.use((request, response, next) => {
-  if (!validateToken()) return response.sendStatus(401);
+app.use(async (request, response, next) => {
+  const token = request.headers.authorization;
+  const tokenValid = await validateToken(token);
+  if (!tokenValid) return response.sendStatus(401);
 
   return next();
 });

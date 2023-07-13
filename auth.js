@@ -14,7 +14,14 @@ exports.validateCredentials = async (username, password) => {
   return id;
 };
 
-exports.validateToken = () => {
-  console.log('validateToken()');
-  return true;
+exports.validateToken = async (token) => {
+  try {
+    await read(
+      'tokens',
+      { exactlyOne: true, params: `WHERE token="${token}"` },
+    );
+    return true;
+  } catch {
+    return false;
+  }
 };
