@@ -1,5 +1,7 @@
+/* eslint no-undef: off */
+
 const { tokens } = require('./tokens');
-const { validateCredentials, validateToken } = require('./auth');
+const { validateToken } = require('./auth');
 const mysql = require('./mysql');
 
 jest.mock('./auth', () => ({
@@ -10,7 +12,7 @@ jest.mock('./auth', () => ({
 describe('can create and delete tokens', () => {
   let token;
   it('create token', async () => {
-    const getToken = () => new Promise((resolve, reject) => {
+    const getToken = () => new Promise((resolve) => {
       const request = {
         method: 'GET',
         query: {
@@ -20,7 +22,7 @@ describe('can create and delete tokens', () => {
       };
       const response = {
         sendStatus: (code) => { resolve(code); },
-        send: (token) => { resolve(token); },
+        send: (newToken) => { resolve(newToken); },
       };
       tokens(request, response);
     });
