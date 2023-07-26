@@ -4,7 +4,9 @@ const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
+  database: process.env.JEST_WORKER_ID
+    ? process.env.TEST_DATABASE_NAME
+    : process.env.DATABASE_NAME,
 });
 
 exports.create = (
@@ -38,4 +40,14 @@ exports.read = (
   });
 });
 exports.update = () => {};
-exports.delete = () => {};
+exports.delete = (
+  table,
+  options,
+) => new Promise((resolve, reject) => {
+  const params = options.params || '';
+  const query = `DELETE FROM ${table} ${params}`;
+  connection.query(query, (error, results) => {
+    if (error) return reject(error);
+    return resolve(results);
+  });
+});

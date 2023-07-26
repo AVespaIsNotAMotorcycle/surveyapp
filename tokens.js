@@ -5,7 +5,7 @@ async function getToken(request, response) {
   const { username, password } = request.query;
   const userID = await validateCredentials(username, password);
   if (!userID) return response.sendStatus(401);
-  const token = Date.now();
+  const token = String(Date.now()).padStart(16, '0');
   await create('tokens', { token, userID });
   return response.send({ token });
 }
