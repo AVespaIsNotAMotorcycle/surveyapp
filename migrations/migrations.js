@@ -22,6 +22,16 @@ CREATE TABLE users (
   `
 ALTER TABLE users ADD COLUMN passwordHash VARCHAR(255) NOT NULL;
   `,
+  `
+CREATE TABLE surveys (
+  id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  questions JSON NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+  `,
 ];
 
 function constructCommand(username, password, database, migration) {

@@ -4,6 +4,7 @@ const { validateToken } = require('./auth');
 
 const { users } = require('./users');
 const { tokens } = require('./tokens');
+const { surveys } = require('./surveys');
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,7 @@ async function handleRequest(request, response) {
   switch (resource) {
     case 'tokens': return tokens(request, response);
     case 'users': return users(request, response);
+    case 'surveys': return surveys(request, response);
     default: return response.sendStatus(404);
   }
 }
