@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint ./*.js",
     "dev": "env-cmd -f .env nodemon --exec 'npm run lint && node app'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jest --watch .",
+    "migrate": "env-cmd -f .env node migrations/migrations.js"
   },
   "repository": {
     "type": "git",
