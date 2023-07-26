@@ -32,6 +32,8 @@ CREATE TABLE surveys (
   PRIMARY KEY (id)
 );
   `,
+  `ALTER TABLE users MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;`,
+  `ALTER TABLE surveys MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;`,
 ];
 
 function constructCommand(username, password, database, migration) {
