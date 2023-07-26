@@ -36,7 +36,7 @@ const ensureUniqueFields = (
 exports.create = async (
   table,
   data,
-  options,
+  options = {},
 ) => {
   await ensureUniqueFields(options, table, data);
 
@@ -53,7 +53,7 @@ exports.create = async (
 
 exports.read = (
   table,
-  options,
+  options = {},
 ) => new Promise((resolve, reject) => {
   const params = options.params || '';
   const query = `SELECT * FROM ${table} ${params}`;
