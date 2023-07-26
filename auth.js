@@ -8,15 +8,17 @@ exports.hashPassword = (password, salt) => crypto
   .digest('hex');
 
 exports.validateCredentials = async (username, password) => {
-  const { id } = await read(
-    'users',
-    {
-      exactlyOne: true,
-      params: `WHERE username="${username}"
-        AND passwordHash="${exports.hashPassword(password, username)}"`,
-    },
-  );
-  return id;
+  try {
+    const { id } = await read(
+      'users',
+      {
+        exactlyOne: true,
+        params: `WHERE username="${username}"
+          AND passwordHash="${exports.hashPassword(password, username)}"`,
+      },
+    );
+    return id;
+  } catch { return 0; }
 };
 
 exports.validateToken = async (token, request) => {
