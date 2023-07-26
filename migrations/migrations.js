@@ -19,6 +19,9 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 );
   `,
+  `
+ALTER TABLE users ADD COLUMN passwordHash VARCHAR(255) NOT NULL;
+  `,
 ];
 
 function constructCommand(username, password, database, migration) {

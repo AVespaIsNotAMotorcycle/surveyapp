@@ -1,5 +1,7 @@
 const mysql = require('mysql');
 
+const errors = require('./errors');
+
 const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
@@ -9,18 +11,45 @@ const connection = mysql.createConnection({
     : process.env.DATABASE_NAME,
 });
 
-exports.create = (
+const ensureUniqueFields = (
+  options,
   table,
   data,
 ) => new Promise((resolve, reject) => {
-  const createdAt = new Date();
-  const row = { ...data, createdAt, updatedAt: createdAt };
-  const query = `INSERT INTO ${table} SET ?`;
-  connection.query(query, row, (error, results) => {
-    if (error) reject(error);
-    else resolve(results);
+  const uniqueFields = options ? options.uniqueFields : null;
+  if (!uniqueFields) { resolve(true); return; }
+  if (!Array.isArray) { resolve(true); return; }
+  const queryPreface = `SELECT * FROM ${table}`;
+  const values = uniqueFields.map((key) => data[key]);
+  const conditions = uniqueFields
+    .map((key) => `WHERE ${key} = ?`).join(' AND ');
+  const query = `${queryPreface} ${conditions}`;
+  connection.query(query, values, (error, results) => {
+    if (error) return reject(error);
+    if (results && results.length > 0) {
+      return reject(Error(errors.rowAlreadyExists));
+    }
+    return resolve(true);
   });
 });
+
+exports.create = async (
+  table,
+  data,
+  options,
+) => {
+  await ensureUniqueFields(options, table, data);
+
+  return new Promise((resolve, reject) => {
+    const createdAt = new Date();
+    const row = { ...data, createdAt, updatedAt: createdAt };
+    const query = `INSERT INTO ${table} SET ?`;
+    connection.query(query, row, (error, results) => {
+      if (error) reject(error);
+      else resolve(results);
+    });
+  });
+};
 
 exports.read = (
   table,
