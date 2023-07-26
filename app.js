@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const { validateToken } = require('./auth');
 
 const { users } = require('./users');
 const { tokens } = require('./tokens');
 
 const app = express();
+app.use(cors({ origin: '*' }));
 
 const PORT = process.env.PORT || 8000;
 
