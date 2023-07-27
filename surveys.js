@@ -1,4 +1,5 @@
-const { read } = require('./mysql');
+const { validateToken } = require('./auth');
+const { read, create } = require('./mysql');
 
 async function getSurvey(request, response) {
   try {
@@ -10,7 +11,22 @@ async function getSurvey(request, response) {
     return response.sendStatus(500);
   }
 }
-function postSurvey(request, response) { response.sendStatus(501); }
+async function postSurvey(request, response) {
+  try {
+    const userID = await validateToken(
+      request.headers.authorization,
+    );
+    const row = await create(
+      'surveys',
+      { ...request.body, userID },
+    );
+    response.send(row);
+  } catch ({ message }) {
+    console.error(message);
+    response.statusMessage = message;
+    response.sendStatus(500);
+  }
+}
 function putSurvey(request, response) { response.sendStatus(501); }
 function deleteSurvey(request, response) { response.sendStatus(501); }
 

@@ -34,7 +34,7 @@ describe('can create and delete tokens', () => {
   it('check that token was created', async () => {
     const request = { path: '' };
     const tokenExists = await validateToken(token, request);
-    expect(tokenExists).toBe(true);
+    expect(tokenExists).toBeTruthy();
   });
   it('cleanup', async () => {
     await mysql.delete(
@@ -43,6 +43,6 @@ describe('can create and delete tokens', () => {
     );
     const request = { path: '' };
     const tokenExists = await validateToken(token, request);
-    expect(tokenExists).toBe(false);
+    expect(tokenExists).toBeFalsy();
   });
 });

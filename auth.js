@@ -26,12 +26,12 @@ exports.validateToken = async (token, request) => {
   if (path === '/tokens' && method === 'GET') return true;
   if (path === '/users' && method === 'POST') return true;
   try {
-    await read(
+    const { userID } = await read(
       'tokens',
       { exactlyOne: true, params: `WHERE token="${token}"` },
     );
-    return true;
+    return userID;
   } catch {
-    return false;
+    return 0;
   }
 };
