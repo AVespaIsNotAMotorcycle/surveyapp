@@ -1,7 +1,6 @@
 /* eslint no-undef: off */
 
 const { surveys } = require('./surveys');
-const { validateToken } = require('./auth');
 const mysql = require('./mysql');
 
 jest.mock('./auth', () => ({
@@ -46,7 +45,6 @@ describe('can create and delete surveys', () => {
       'surveys',
       { params: `WHERE id=${survey.insertId}` },
     );
-    const request = { path: '' };
     const surveyExists = await mysql.read('surveys');
     expect(surveyExists).toStrictEqual([]);
   });
