@@ -15,10 +15,15 @@ async function postSurvey(request, response) {
   try {
     const userID = await validateToken(
       request.headers.authorization,
+      request,
     );
     const row = await create(
       'surveys',
-      { ...request.body, userID },
+      {
+        ...request.body,
+        questions: JSON.stringify(request.body.questions),
+        userID,
+      },
     );
     response.send(row);
   } catch ({ message }) {
